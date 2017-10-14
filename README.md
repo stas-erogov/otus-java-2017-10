@@ -2,6 +2,6 @@
 
 Группа 2017-10
 
-Stanislav Erogov
+Stanislav Erogov (Станислав Ерогов)
 
 erogov.syu@gmail.com
