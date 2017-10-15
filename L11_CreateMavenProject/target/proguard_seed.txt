@@ -1,6 +1,0 @@
-ru.otus.l11_erogov.Main
-ru.otus.l11_erogov.Main: int MEASURE_COUNT
-ru.otus.l11_erogov.Main: Main()
-ru.otus.l11_erogov.Main: void main(java.lang.String[])
-ru.otus.l11_erogov.Main: void calcTime(java.lang.Runnable)
-ru.otus.l11_erogov.Main: void lambda$main$0(java.util.List,java.util.Collection)
