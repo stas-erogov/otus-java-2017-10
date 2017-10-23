@@ -1,6 +1,8 @@
 package ru.otus.L21_erogov;
 
 import java.lang.management.ManagementFactory;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class Main {
@@ -8,6 +10,7 @@ public class Main {
         System.out.println("pid: " + ManagementFactory.getRuntimeMXBean().getName());
 
         int size = 25_000_000;
+
         System.out.println("Strings (40 bytes): ");
         printSize("Empty string size (500 000 elements): ", () -> new String(), 500_000);
         printSize("Empty string size: ", () -> new String(), size);
@@ -19,10 +22,21 @@ public class Main {
 
         System.out.println("Arrays (12 bytes): ");
         printSize("1. Array of int (500 000 elements): ", () -> new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, 500_000);
-        printSize("2. Array of int:", () -> new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, size);
+        printSize("2. Array of int: ", () -> new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, size);
         printSize("3. Array of long: ", () -> new long[]{0L, 1L, 2L, 3L, 4L}, size);
         printSize("4. Array of char[10]: ", () -> new char[10], size);
         printSize("5. Array of char[0]: ", () -> new char[0], size);
+
+        System.out.println("Оценка роста размера контейнера в зав-ти от количества элементов: ");
+        List<Integer> x = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        
+        x.stream().map(n -> {
+            int[] arr = n <= 0 ? new int[1] : new int[n];
+            for (int i = 0; i < n; i++) arr[i] = i;
+            return arr;
+        }).forEach(m -> {
+            printSize("Array of int[" + m.length + "]: ", () -> m.clone(), size);
+        });
     }
 
     private static <T> void printSize(String text, Supplier<T> supplier, int size) {
