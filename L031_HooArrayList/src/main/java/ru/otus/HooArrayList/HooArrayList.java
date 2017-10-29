@@ -1,15 +1,21 @@
 package ru.otus.HooArrayList;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Iterator;
+import java.util.Arrays;
+import java.util.ListIterator;
+import java.util.Objects;
+
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
 
 public class HooArrayList<T> implements List<T> {
 
     private int size = 0;
-    private static int capacity = 10;
+    private int capacity = 10;
 
     private Object[] elementData;
 
@@ -89,8 +95,7 @@ public class HooArrayList<T> implements List<T> {
 
     public boolean remove(Object o) {
         T t = remove(indexOf(o));
-        if (t.equals(o)) return true;
-        return false;
+        return t.equals(o);
     }
 
     public T remove(int i) {
@@ -153,7 +158,7 @@ public class HooArrayList<T> implements List<T> {
         if (i > i1) {
             throw new IllegalArgumentException("fromIndex: " + i + " > toIndex " + i1);
         }
-        List<T> subList = new ArrayList<>();
+        List<T> subList = new HooArrayList<>();
         System.arraycopy(this.elementData, i, subList, 0, i1 - i + 1);
         return subList;
     }
