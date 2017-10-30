@@ -1,15 +1,16 @@
 package ru.otus.HooArrayList;
 
 import java.util.Collections;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        HooArrayList<String> strList1 = new HooArrayList<>(15);
-        HooArrayList<Integer> intList1 = new HooArrayList<>(5);
+        List<String> strList1 = new HooArrayList<>(15);
+        List<Integer> intList1 = new HooArrayList<>(5);
 
         System.out.println("(1) HooArrayList.add: ");
         "abcdefghijklmnopqrstuvwxyz".chars()
-                .mapToObj(c->String.valueOf((char)c))
+                .mapToObj(c -> String.valueOf((char) c))
                 .forEach(s -> strList1.add(s));
 
         System.out.println(String.format("\t%s\n", strList1));
@@ -22,9 +23,9 @@ public class Main {
         System.out.println(String.format("\t%s\n", strList1));
 
         System.out.println("(3) Collections.copy: ");
-        HooArrayList<String> strList2 = new HooArrayList<>();
+        List<String> strList2 = new HooArrayList<>();
 
-        strList1.stream().forEach(s->strList2.add("0"));
+        strList1.stream().forEach(s -> strList2.add("0"));
 
         System.out.println(String.format("Source list:\n\t%s", strList2));
         Collections.copy(strList2, strList1);
@@ -36,5 +37,29 @@ public class Main {
 
         Collections.sort(intList1, (i1, i2) -> i2.compareTo(i1));
         System.out.println(String.format("\t%s", intList1));
+
+        strList1.clear();
+        strList1.add("1");
+
+        List<String> list = new HooArrayList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.remove("b");
+        System.out.println(list.size());
+
+        List<String> list1 = new HooArrayList<>();
+        list1.add("a");
+        list1.add("b");
+        list1.add("c");
+        list1.add("d");
+        List<String> list2 = list1.subList(1, 2);
+        System.out.println(list2);
+
+        List<String> marvin = new HooArrayList<>();
+        marvin.add("depression");
+
+        marvin.remove(marvin.listIterator().previous());
+
     }
 }
