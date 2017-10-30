@@ -60,7 +60,9 @@ public class HooArrayList<T> implements List<T> {
     }
 
     public void clear() {
-        this.elementData = null;
+        for (int i = 0; i < this.size; ++i) {
+            this.elementData[i] = null;
+        }
         this.size = 0;
     }
 
@@ -83,8 +85,9 @@ public class HooArrayList<T> implements List<T> {
     public void add(int i, T t) {
         checkRange(i);
         ensureCapacity(1);
-        System.arraycopy(elementData, i, elementData, i + 1, size - i);
-        elementData[i] = t;
+        System.arraycopy(this.elementData, i, this.elementData, i + 1, this.size - i);
+        this.elementData[i] = t;
+        this.size++;
     }
 
     public boolean add(T t) {
@@ -101,7 +104,7 @@ public class HooArrayList<T> implements List<T> {
     public T remove(int i) {
         checkRange(i);
         Object o = this.elementData[i];
-        System.arraycopy(this.elementData, i + 1, this.elementData, i, this.size - 1);
+        System.arraycopy(this.elementData, i + 1, this.elementData, i, --this.size);
         return (T) o;
     }
 
@@ -152,14 +155,16 @@ public class HooArrayList<T> implements List<T> {
         return ts;
     }
 
-    public List<T> subList(int i, int i1) {
-        checkRange(i);
-        checkRange(i1);
-        if (i > i1) {
-            throw new IllegalArgumentException("fromIndex: " + i + " > toIndex " + i1);
+    public List<T> subList(int from, int to) {
+        checkRange(from);
+        checkRange(to);
+        if (from > to) {
+            throw new IllegalArgumentException("fromIndex: " + from + " > toIndex " + to);
         }
         List<T> subList = new HooArrayList<>();
-        System.arraycopy(this.elementData, i, subList, 0, i1 - i + 1);
+        for (int i = from; i < from + to; ++i) {
+            subList.add((T) this.elementData[i]);
+        }
         return subList;
     }
 
@@ -198,7 +203,7 @@ public class HooArrayList<T> implements List<T> {
 
         @Override
         public void add(E e) {
-
+            throw new NotImplementedException();
         }
 
         @Override
@@ -208,7 +213,7 @@ public class HooArrayList<T> implements List<T> {
 
         @Override
         public boolean hasPrevious() {
-            return false;
+            throw new NotImplementedException();
         }
 
         @Override
@@ -223,23 +228,23 @@ public class HooArrayList<T> implements List<T> {
 
         @Override
         public int nextIndex() {
-            return 0;
+            throw new NotImplementedException();
         }
 
         @Override
         public E previous() {
-            return null;
+            throw new NotImplementedException();
         }
 
 
         @Override
         public int previousIndex() {
-            return 0;
+            throw new NotImplementedException();
         }
 
         @Override
         public void remove() {
-
+            throw new NotImplementedException();
         }
 
         @Override
@@ -251,31 +256,31 @@ public class HooArrayList<T> implements List<T> {
 
 
     public boolean containsAll(Collection<?> collection) {
-        return false;
+        throw new NotImplementedException("HooArrayList.containsAll");
     }
 
     public boolean addAll(Collection<? extends T> collection) {
-        return false;
+        throw new NotImplementedException("HooArrayList.addAll");
     }
 
     public boolean addAll(int i, Collection<? extends T> collection) {
-        return false;
+        throw new NotImplementedException("HooArrayList.addAll i");
     }
 
     public boolean removeAll(Collection<?> collection) {
-        return false;
+        throw new NotImplementedException("HooArrayList.removeAll");
     }
 
     public boolean removeIf(Predicate<? super T> predicate) {
-        return false;
+        throw new NotImplementedException("HooArrayList.removeIf");
     }
 
     public boolean retainAll(Collection<?> collection) {
-        return false;
+        throw new NotImplementedException("HooArrayList.retainAll");
     }
 
     public void replaceAll(UnaryOperator<T> unaryOperator) {
-
+        throw new NotImplementedException("HooArrayList.unaryOperator");
     }
 
     @Override
