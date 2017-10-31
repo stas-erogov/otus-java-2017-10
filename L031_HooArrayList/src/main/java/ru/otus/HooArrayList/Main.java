@@ -56,10 +56,5 @@ public class Main {
         List<String> list2 = list1.subList(1, 2);
         System.out.println(list2);
 
-        List<String> marvin = new HooArrayList<>();
-        marvin.add("depression");
-
-        marvin.remove(marvin.listIterator().previous());
-
     }
 }
