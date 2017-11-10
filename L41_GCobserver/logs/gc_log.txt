@@ -1,0 +1,20 @@
+19:44:58.395 8292@LC21PC
+19:44:58.406 -Xms512m
+19:44:58.406 -Xmx512m
+19:44:58.406 -Dcom.sun.management.jmxremote.port=15000
+19:44:58.407 -Dcom.sun.management.jmxremote.authenticate=false
+19:44:58.407 -Dcom.sun.management.jmxremote.ssl=false
+19:44:58.415 -Xloggc:.\logs\vm_gc_log_%p.txt
+19:44:58.416 -XX:+PrintGCDateStamps
+19:44:58.416 -XX:+PrintGCDetails
+19:44:58.417 -XX:+UseParallelOldGC
+19:44:58.421 GC:YOUNG	performed counts: 0 times, elapsed time: 0 ms
+19:44:58.422 GC:OLD	performed counts: 0 times, elapsed time: 0 ms
+19:45:58.422 GC:YOUNG	performed counts: 2 times, elapsed time: 145 ms
+19:45:58.423 GC:OLD	performed counts: 0 times, elapsed time: 0 ms
+19:46:58.423 GC:YOUNG	performed counts: 3 times, elapsed time: 262 ms
+19:46:58.424 GC:OLD	performed counts: 1 times, elapsed time: 131 ms
+19:47:58.425 GC:YOUNG	performed counts: 4 times, elapsed time: 325 ms
+19:47:58.427 GC:OLD	performed counts: 3 times, elapsed time: 542 ms
+19:48:58.429 GC:YOUNG	performed counts: 4 times, elapsed time: 325 ms
+19:48:58.430 GC:OLD	performed counts: 6 times, elapsed time: 1239 ms

@@ -1,0 +1,32 @@
+19:29:17.540 8912@LC21PC
+19:29:17.549 -Xms512m
+19:29:17.549 -Xmx512m
+19:29:17.549 -Dcom.sun.management.jmxremote.port=15000
+19:29:17.550 -Dcom.sun.management.jmxremote.authenticate=false
+19:29:17.550 -Dcom.sun.management.jmxremote.ssl=false
+19:29:17.550 -Xloggc:.\logs\vm_gc_log_%p.txt
+19:29:17.550 -XX:+PrintGCDateStamps
+19:29:17.551 -XX:+PrintGCDetails
+19:29:17.551 -XX:+UseSerialGC
+19:29:17.555 GC:YOUNG	performed counts: 0 times, elapsed time: 0 ms
+19:29:17.556 GC:OLD	performed counts: 0 times, elapsed time: 0 ms
+19:30:17.558 GC:YOUNG	performed counts: 1 times, elapsed time: 76 ms
+19:30:17.559 GC:OLD	performed counts: 0 times, elapsed time: 0 ms
+19:31:17.560 GC:YOUNG	performed counts: 3 times, elapsed time: 334 ms
+19:31:17.561 GC:OLD	performed counts: 0 times, elapsed time: 0 ms
+19:32:17.562 GC:YOUNG	performed counts: 5 times, elapsed time: 334 ms
+19:32:17.563 GC:OLD	performed counts: 2 times, elapsed time: 405 ms
+19:33:17.564 GC:YOUNG	performed counts: 6 times, elapsed time: 334 ms
+19:33:17.565 GC:OLD	performed counts: 4 times, elapsed time: 936 ms
+19:34:18.016 GC:YOUNG	performed counts: 6 times, elapsed time: 334 ms
+19:34:18.185 GC:OLD	performed counts: 424 times, elapsed time: 35036 ms
+19:35:19.366 GC:YOUNG	performed counts: 6 times, elapsed time: 334 ms
+19:35:19.758 GC:OLD	performed counts: 1078 times, elapsed time: 87485 ms
+19:36:20.310 GC:YOUNG	performed counts: 6 times, elapsed time: 334 ms
+19:36:20.688 GC:OLD	performed counts: 1723 times, elapsed time: 137344 ms
+19:37:21.886 GC:YOUNG	performed counts: 6 times, elapsed time: 334 ms
+19:37:23.550 GC:OLD	performed counts: 2322 times, elapsed time: 184092 ms
+19:38:25.134 GC:YOUNG	performed counts: 6 times, elapsed time: 334 ms
+19:38:26.146 GC:OLD	performed counts: 2890 times, elapsed time: 229435 ms
+19:39:27.873 GC:YOUNG	performed counts: 6 times, elapsed time: 334 ms
+19:39:29.678 GC:OLD	performed counts: 3453 times, elapsed time: 275084 ms
