@@ -31,8 +31,8 @@ public class GCobserver {
         OLD.add("G1 Mixed Generation");
     }
 
-    private static GCData young = new GCData("YOUNG");
-    private static GCData old = new GCData("OLD");
+    private volatile static GCData young = new GCData("YOUNG");
+    private volatile static GCData old = new GCData("OLD");
 
     public static void run() {
         List<GarbageCollectorMXBean> gcmxbs = ManagementFactory.getGarbageCollectorMXBeans();
