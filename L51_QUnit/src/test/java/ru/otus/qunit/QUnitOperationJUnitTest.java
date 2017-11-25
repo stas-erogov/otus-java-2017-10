@@ -3,6 +3,7 @@ package ru.otus.qunit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.otus.l51.QUnitOperation;
 
 import static org.junit.Assert.*;
 

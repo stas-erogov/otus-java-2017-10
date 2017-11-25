@@ -1,4 +1,4 @@
-package ru.otus.qunit;
+package ru.otus.l51;
 
 public class QUnitOperation {
 
