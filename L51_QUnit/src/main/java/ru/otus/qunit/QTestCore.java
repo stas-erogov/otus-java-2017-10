@@ -62,18 +62,19 @@ public class QTestCore {
     }
 
     private static void executeQTest(Class<?> clazz, QReport report) {
-        Object testObject = ReflectionHelper.instantiate(clazz);
-        runTests(clazz, testObject, report);
+        runTests(clazz, report);
         report.printResults();
     }
 
-    private static void runTests(Class<?> clazz, Object testObject, QReport report) {
+    private static void runTests(Class<?> clazz, QReport report) {
         Method[] methods = clazz.getDeclaredMethods();
         List<Method> beforeTestMethods = collectAnnotatedMethods(methods, QBefore.class);
         List<Method> afterTestMethods = collectAnnotatedMethods(methods, QAfter.class);
 
         for (Method method : methods) {
             if (method.isAnnotationPresent(QTest.class)) {
+                Object testObject = ReflectionHelper.instantiate(clazz);
+
                 beforeTestMethods.forEach(m -> {
                     try {
                         ReflectionHelper.callMethod(testObject, m.getName());
