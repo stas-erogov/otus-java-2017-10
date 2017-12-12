@@ -1,60 +1,57 @@
 package department;
 
 import atme.ATM;
-import atme.methods.MethodStrategy;
+import atme.Cassete;
 
-public class ATMDecorator extends ATM implements ATMObserver{
-    private String ATMState;
+import java.util.ArrayList;
+import java.util.List;
 
-    private String getATMState() {
-        return ATMState;
+public class ATMDecorator implements ATM, ATMObserver {
+    private final ATM atm;
+    private final List<MemoCassete> memCassetes = new ArrayList<>();
+
+    public ATMDecorator(ATM atm) {
+        this.atm = atm;
     }
 
-    public void setATMState(String ATMState) {
-        this.ATMState = ATMState;
+    public void loadCassete(MemoCassete cassete) {
+        memCassetes.add(cassete);
+        atm.loadCassete(cassete);
     }
 
-    public ATMDecorator(String ATMState) {
-        this.ATMState = ATMState;
-        storeState = new ATMMemento();
+    @Override
+    public void loadCassete(Cassete cassete) {
+        atm.loadCassete(cassete);
     }
 
-    public ATMDecorator(MethodStrategy methodStrategy, String ATMState) {
-        super(methodStrategy);
-        this.ATMState = ATMState;
-        storeState = new ATMMemento();
+    @Override
+    public boolean withdraw(int requested) {
+        return atm.withdraw(requested);
     }
 
-    private ATMMemento storeState;
+    @Override
+    public int getBalance() {
+        return atm.getBalance();
+    }
 
     @Override
     public void notify(Event event) {
+
         switch (event) {
             case RESTORE_STATE:
-                this.restoreState();
+                restoreState();
                 break;
             case SHOW_STATE:
-                System.out.println(this.getATMState());
                 break;
             case SHOW_BALANCE:
                 System.out.println(this.getBalance());
                 break;
         }
-    }
 
-    private class ATMMemento {
-        final String someState;
-
-        public String getState() {
-            return someState;
-        }
-
-        public ATMMemento() {
-            this.someState = ATMState;
-        }
     }
 
     private void restoreState() {
-        this.ATMState = storeState.getState();
+        memCassetes.stream()
+                .forEach(c->c.restoreState());
     }
 }
