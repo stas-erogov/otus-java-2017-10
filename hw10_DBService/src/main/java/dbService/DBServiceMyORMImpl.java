@@ -14,13 +14,21 @@ import myorm.MyORMExecutor;
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DBServiceMyORMImpl implements DBService {
     private final MyORMExecutor executor;
+    private final Map<Type, BaseDAO> daos = new HashMap<>();
+
     public DBServiceMyORMImpl() {
         executor = new MyORMExecutor(ConnectionHelperH2.getConnection());
         checkSchema();
+
+        daos.put(UserDataSet.class, new UsersDAOMyORM(executor));
+        daos.put(AddressDataSet.class, new AddressesDAOMyORM(executor));
+        daos.put(PhoneDataSet.class, new PhonesDAOMyORM(executor));
     }
 
     @Override
@@ -56,14 +64,7 @@ public class DBServiceMyORMImpl implements DBService {
     }
 
     private BaseDAO getDAO(Type type) {
-        if (type == UserDataSet.class) {
-            return new UsersDAOMyORM(executor);
-        } else if (type == AddressDataSet.class) {
-            return new AddressesDAOMyORM(executor);
-        } else if (type == PhoneDataSet.class) {
-            return new PhonesDAOMyORM(executor);
-        }
-        throw new UnsupportedOperationException("Unsupported class: " + type);
+        return daos.get(type);
     }
 
     private void checkSchema() {

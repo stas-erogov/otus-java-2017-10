@@ -8,11 +8,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-public class UsersDAOHibernate implements BaseDAO {
+public class UsersDAOHibernate implements BaseDAOHibernate {
     private Session session;
 
-    public UsersDAOHibernate(Session session) {
-        this.session = session;
+    public UsersDAOHibernate() {
     }
 
     @Override
@@ -36,5 +35,10 @@ public class UsersDAOHibernate implements BaseDAO {
         CriteriaQuery<UserDataSet> criteriaQuery = builder.createQuery(UserDataSet.class);
         criteriaQuery.from(UserDataSet.class);
         return session.createQuery(criteriaQuery).list();
+    }
+
+    @Override
+    public void setSession(Session session) {
+        this.session = session;
     }
 }

@@ -1,9 +1,6 @@
 package dbService;
 
-import dao.BaseDAO;
-import dao.AddressesDAOHibernate;
-import dao.PhonesDAOHibernate;
-import dao.UsersDAOHibernate;
+import dao.*;
 import db.AddressDataSet;
 import db.DataSet;
 import db.PhoneDataSet;
@@ -16,12 +13,16 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class DBServiceHibernateImpl implements DBService {
     private final SessionFactory sessionFactory;
+
+    private final Map<Type, BaseDAOHibernate> daos = new HashMap<>();
     public DBServiceHibernateImpl() {
         Configuration configuration = new Configuration();
 
@@ -40,6 +41,10 @@ public class DBServiceHibernateImpl implements DBService {
         configuration.setProperty("hibernate.enable_lazy_load_no_trans", "true");
 
         sessionFactory = createSessionFactory(configuration);
+
+        daos.put(UserDataSet.class, new UsersDAOHibernate());
+        daos.put(AddressDataSet.class, new AddressesDAOHibernate());
+        daos.put(PhoneDataSet.class, new PhonesDAOHibernate());
     }
 
     private static SessionFactory createSessionFactory(Configuration configuration) {
@@ -107,14 +112,14 @@ public class DBServiceHibernateImpl implements DBService {
         }
     }
 
-    private BaseDAO getDAO(Session session, Type type) {
-        if (type == UserDataSet.class) {
-            return new UsersDAOHibernate(session);
-        } else if (type == AddressDataSet.class) {
-            return new AddressesDAOHibernate(session);
-        } else if (type == PhoneDataSet.class) {
-            return new PhonesDAOHibernate(session);
-        }
-        throw new UnsupportedOperationException("Unsupported class: " + type);
+    private BaseDAOHibernate getDAO(Type type) {
+        return daos.get(type);
     }
+
+    private BaseDAO getDAO(Session session, Type type) {
+        BaseDAOHibernate dao = this.getDAO(type);
+        dao.setSession(session);
+        return dao;
+    }
+
 }

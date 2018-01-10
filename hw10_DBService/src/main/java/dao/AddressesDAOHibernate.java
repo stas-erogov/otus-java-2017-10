@@ -7,11 +7,10 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class AddressesDAOHibernate implements BaseDAO {
-    private final Session session;
+public class AddressesDAOHibernate implements BaseDAOHibernate {
+    private Session session = null;
 
-    public AddressesDAOHibernate(Session session) {
-        this.session = session;
+    public AddressesDAOHibernate() {
     }
 
     @Override
@@ -35,5 +34,10 @@ public class AddressesDAOHibernate implements BaseDAO {
         Query<AddressDataSet> query = session.createQuery("select a from addresses a", AddressDataSet.class);
         session.getTransaction().commit();
         return query.getResultList();
+    }
+
+    @Override
+    public void setSession(Session session) {
+        this.session = session;
     }
 }
