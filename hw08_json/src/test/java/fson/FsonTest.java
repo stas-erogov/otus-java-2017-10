@@ -46,7 +46,7 @@ public class FsonTest {
 
     @Test
     public void fromJson() {
-        data.DataObject dataObject1 = new Fson().fromJson(jsonn, data.DataObject.class);
+        data.DataObject dataObject1 = FsonFromJson.fromJson(jsonn, data.DataObject.class);
         data.DataObject dataObject2 = new Gson().fromJson(jsonn, data.DataObject.class);
 
         assertTrue(dataObject1.equals(dataObject2));

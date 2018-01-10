@@ -72,7 +72,7 @@ public abstract class TypeAdapter<T> {
                 }
 
         }
-        return null;
+        throw new RuntimeException();
     }
 
     static class StringType extends TypeAdapter {

@@ -1,5 +1,6 @@
 import data.DataObject;
 import fson.Fson;
+import fson.FsonFromJson;
 
 public class Main {
     public static void main(String...arg) {
@@ -18,7 +19,7 @@ public class Main {
                 "\"sourceData\":\"The Ultimate Question of Life, the Universe, and Everything\"," +
                 "\"hiddenId\":1138,\"thatsDouble\":3.3333332538604736}\n";
 
-        DataObject dataObjectAfter = fson.fromJson(jsonn, DataObject.class);
+        DataObject dataObjectAfter = FsonFromJson.fromJson(jsonn, DataObject.class);
         System.out.println(fson.toJson(dataObjectAfter));
     }
 }
