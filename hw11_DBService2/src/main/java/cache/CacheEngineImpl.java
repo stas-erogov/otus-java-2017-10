@@ -18,7 +18,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     private final long idleTimeMs;
     private final boolean isEternal;
 
-    private final Map<K, SoftReference<MyElement<K, V>>> elements = new LinkedHashMap<>();
+    private final Map<K, SoftReference<MyElement<V>>> elements = new LinkedHashMap<>();
     private final Timer timer = new Timer();
 
     private int hit = 0;
@@ -31,13 +31,12 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         this.isEternal = lifeTimeMs == 0 && idleTimeMs == 0 || isEternal;
     }
 
-    public void put(MyElement<K, V> element) {
+    public void put(K key, MyElement<V> element) {
         if (elements.size() == maxElements) {
             K firstKey = elements.keySet().iterator().next();
             elements.remove(firstKey);
         }
 
-        K key = element.getKey();
         elements.put(key, new SoftReference(element));
 
         if (!isEternal) {
@@ -52,9 +51,9 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         }
     }
 
-    public MyElement<K, V> get(K key) {
-        MyElement<K, V> element = null;
-        SoftReference<MyElement<K, V>> reference = elements.get(key);
+    public MyElement<V> get(K key) {
+        MyElement<V> element = null;
+        SoftReference<MyElement<V>> reference = elements.get(key);
         if (reference != null) {
             element = elements.get(key).get();
             if (element != null) {
@@ -80,19 +79,22 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         timer.cancel();
     }
 
-    private TimerTask getTimerTask(final K key, Function<MyElement<K, V>, Long> timeFunction) {
+    private TimerTask getTimerTask(final K key, Function<MyElement<V>, Long> timeFunction) {
         return new TimerTask() {
             @Override
             public void run() {
-                MyElement<K, V> element = elements.get(key).get();
-                if (element == null || isT1BeforeT2(timeFunction.apply(element), System.currentTimeMillis())) {
-                    elements.remove(key);
-                    this.cancel();
+                MyElement<V> element = null;
+                SoftReference<MyElement<V>> reference = elements.get(key);
+                if (reference != null) {
+                    element = elements.get(key).get();
+                    if (element == null || isT1BeforeT2(timeFunction.apply(element), System.currentTimeMillis())) {
+                        elements.remove(key);
+                        this.cancel();
+                    }
                 }
             }
         };
     }
-
 
     private boolean isT1BeforeT2(long t1, long t2) {
         return t1 < t2 + TIME_THRESHOLD_MS;

@@ -5,9 +5,9 @@ package cache;
  */
 public interface CacheEngine<K, V> {
 
-    void put(MyElement<K, V> element);
+    void put(K key, MyElement<V> element);
 
-    MyElement<K, V> get(K key);
+    MyElement<V> get(K key);
 
     int getHitCount();
 

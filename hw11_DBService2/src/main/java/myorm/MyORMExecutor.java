@@ -62,9 +62,8 @@ public class MyORMExecutor {
             e.printStackTrace();
         }
         System.out.println("Inserted " + rows + " rows");
-        if (cache != null) {
-            cache.put(new MyElement<>(dataSet.getId(), dataSet));
-        }
+        cache.put(dataSet.getId(), new MyElement<>(dataSet));
+
 
         Field[] fields = ReflectionHelper.getAnnotatedFields(dataSet.getClass(), OneToMany.class);
         for (Field f : fields) {
@@ -81,7 +80,7 @@ public class MyORMExecutor {
 
     public <T extends DataSet> T load(long id, Class<T> clazz) {
         T queryObject = null;
-        if (cache != null && cache.get(id) != null) {
+        if (cache.get(id) != null) {
             queryObject = (T) cache.get(id).getValue();
             System.out.println("Cache hits: " + cache.getHitCount());
             System.out.println("Cache misses: " + cache.getMissCount());
@@ -94,8 +93,9 @@ public class MyORMExecutor {
         try {
             queryObject = execQuery(sql, resultSet -> loadResultSet(clazz, resultSet, null).get(0));
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Object not found");
         }
+        cache.put(id, new MyElement<>(queryObject));
         return queryObject;
     }
 

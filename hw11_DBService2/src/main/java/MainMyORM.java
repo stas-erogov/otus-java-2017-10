@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainMyORM {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         String status;
 
         MyORMConfig config = new MyORMConfig();
         config.setParameter("url","jdbc:h2:tcp://localhost/~/test");
         config.setParameter("username","sa");
         config.setParameter("password","");
-        config.setParameter("cache_max_elements","25");
+        config.setParameter("cache_max_elements","80");
         config.setParameter("cache_life_time_ms","0");
         config.setParameter("cache_idle_time_ms","0");
         config.setParameter("cache_is_eternal","true");
@@ -53,6 +53,14 @@ public class MainMyORM {
         for (Long id : ids) {
             System.out.println(dbService.read(id, UserDataSet.class));
         }
+
+        Thread.sleep(1000);
+
+        System.out.println(dbService.read(132, UserDataSet.class));
+        System.out.println(dbService.read(132, UserDataSet.class));
+
+        Thread.sleep(1000);
+        System.out.println(dbService.read(132, UserDataSet.class));
 
         dbService.shutdown();
     }
