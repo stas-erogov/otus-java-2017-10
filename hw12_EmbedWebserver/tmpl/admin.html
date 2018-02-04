@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cache info</title>
+    <script>
+        function refresh() {
+            location.reload();
+        }
+    </script>
+</head>
+<body onload='setInterval(function(){refresh()}, ${refreshPeriod} );'>
+
+<h2>Parameters: </h2>
+<p>Login: ${login}</p>
+<p>Method: ${method}</p>
+<p>URL: ${URL}</p>
+<p>Locale: ${locale}</p>
+<p>SessionId: ${sessionId}</p>
+<p>Parameters: ${parameters}</p>
+<br/>
+
+<h2>Cache status: </h2>
+<table>
+    <tr>
+        <td>Cache hits: </td>
+        <td>${cacheHits}</td>
+    </tr>
+    <tr>
+        <td>Cache missed: </td>
+        <td>${cacheMiss}</td>
+    </tr>
+</table>
+</body>
+</html>
