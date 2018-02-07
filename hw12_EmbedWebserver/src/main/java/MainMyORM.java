@@ -16,36 +16,12 @@ import java.util.List;
 
 public class MainMyORM {
     public static void main(String[] args) throws Exception {
-        String status;
-
-        MyORMConfig config = new MyORMConfig();
-        config.setParameter("url","jdbc:h2:tcp://localhost/~/test");
-        config.setParameter("username","sa");
-        config.setParameter("password","");
-        config.setParameter("cache_max_elements","80");
-        config.setParameter("cache_life_time_ms","0");
-        config.setParameter("cache_idle_time_ms","0");
-        config.setParameter("cache_is_eternal","true");
-        config.setParameter("http_port", "8080");
-        config.setParameter("http_resource_base","html");
-        config.setParameter("http_template_path","/tmpl");
-        config.setParameter("http_template_adminpage","admin.html");
-        config.setParameter("http_template_loginpage","login.html");
-        config.setParameter("http_refresh_period_adminpage", "5000");
-        config.setParameter("superuser", "admin");
-        config.setParameter("superuser_password", "c3p0");
+        MyORMConfig config = getMyORMConfig();
 
         DBService dbService = new DBServiceMyORMImpl(config);
-        status = dbService.getLocalStatus();
-        System.out.println(status);
-
-        JettyServer jetty = new JettyServer(config);
-        ServletHolder holder = new ServletHolder(new AdminServlet(config, dbService.getCache()));
-        jetty.addServlet(holder, "/admin");
-
-        holder = new ServletHolder(new LoginServlet(config));
-        jetty.addServlet(holder, "/login");
+        JettyServer jetty = initJettyServer(config, dbService);
         jetty.run();
+        System.out.println(dbService.getLocalStatus());
 
         AddressDataSet address1 = new AddressDataSet("1", "address1");
         dbService.save(address1);
@@ -76,7 +52,6 @@ public class MainMyORM {
             System.out.println(dbService.read(id, UserDataSet.class));
         }
 
-
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String input;
         while (!(input = reader.readLine()).equals("stop")) {
@@ -89,5 +64,35 @@ public class MainMyORM {
 
         jetty.stop();
         dbService.shutdown();
+    }
+
+    private static JettyServer initJettyServer(MyORMConfig config, DBService dbService) throws Exception {
+        JettyServer jetty = new JettyServer(config);
+        ServletHolder holder = new ServletHolder(new AdminServlet(config, dbService.getCache()));
+        jetty.addServlet(holder, "/admin");
+
+        holder = new ServletHolder(new LoginServlet(config));
+        jetty.addServlet(holder, "/login");
+        return jetty;
+    }
+
+    private static MyORMConfig getMyORMConfig() {
+        MyORMConfig config = new MyORMConfig();
+        config.setParameter("url","jdbc:h2:tcp://localhost/~/test");
+        config.setParameter("username","sa");
+        config.setParameter("password","");
+        config.setParameter("cache_max_elements","80");
+        config.setParameter("cache_life_time_ms","0");
+        config.setParameter("cache_idle_time_ms","0");
+        config.setParameter("cache_is_eternal","true");
+        config.setParameter("http_port", "8080");
+        config.setParameter("http_resource_base","html");
+        config.setParameter("http_template_path","/tmpl");
+        config.setParameter("http_template_adminpage","admin.html");
+        config.setParameter("http_template_loginpage","login.html");
+        config.setParameter("http_refresh_period_adminpage", "5000");
+        config.setParameter("superuser", "admin");
+        config.setParameter("superuser_password", "c3p0");
+        return config;
     }
 }

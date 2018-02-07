@@ -36,7 +36,7 @@ public class AdminServlet extends HttpServlet {
         login = (login == null ? "" : login);
 
         String page;
-        if (login.equals("admin")) {
+        if (login.equals(myORMConfig.getParameter(MyORMparam.SUPERUSER))) {
             Map<String, Object> data = new HashMap<>();
             data.put("cacheHits", cache.getHitCount());
             data.put("cacheMiss", cache.getMissCount());
