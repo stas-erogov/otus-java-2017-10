@@ -32,11 +32,11 @@ public class SomeActionsServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (dbService == null) {
-            log.info("doGet: dbService is null");
+            log.error("doPost: dbService is null");
         }
-        log.info("doGet: " + dbService.getLocalStatus());
+        log.info("doPost: " + dbService.getLocalStatus());
 
         someActions(dbService);
         PrintWriter out = resp.getWriter();
