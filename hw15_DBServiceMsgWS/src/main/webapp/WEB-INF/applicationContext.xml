@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+    <context:component-scan base-package="http, cache, myorm"/>
+    <context:annotation-config/>
+    <context:spring-configured/>
+
+    <bean id="myORMConfig" class="myorm.MyORMConfig">
+        <constructor-arg name="filename" value="config.properties"/>
+    </bean>
+
+    <bean id="myORMExecutor" class="myorm.MyORMExecutor" init-method="init">
+        <constructor-arg ref="myORMConfig" type="myorm.MyORMConfig"/>
+        <property name="cacheEngine" ref="cacheEngine"/>
+    </bean>
+
+    <bean id="cacheEngine" class="cache.CacheEngineImpl">
+        <constructor-arg ref="myORMConfig" type="myorm.MyORMConfig"/>
+    </bean>
+
+    <bean id="dbService" class="dbService.DBServiceMyORMImpl" init-method="init">
+        <constructor-arg ref="myORMConfig" type="myorm.MyORMConfig"/>
+        <property name="myORMExecutor" ref="myORMExecutor"/>
+    </bean>
+
+    <bean id="messageSystem" class="msgserver.MessageSystem"/>
+
+    <bean id="messageSystemContext" class="msgserver.MessageSystemContext" init-method="init">
+        <constructor-arg ref="messageSystem" type="msgserver.MessageSystem"/>
+        <property name="ctxRegistry">
+            <map>
+                <entry key="config" value-ref="myORMConfig"/>
+                <entry key="cache" value-ref="cacheEngine"/>
+                <entry key="db" value-ref="dbService"/>
+            </map>
+        </property>
+        <property name="msgMapping">
+            <map>
+                <entry key="credentials" value="wsserver.CredentialMessage"/>
+                <entry key="someActions" value="dbService.SomeActionMessage"/>
+                <entry key="cacheQueryStatus" value="cache.CacheStatusQueryMessage"/>
+            </map>
+        </property>
+    </bean>
+
+</beans>
