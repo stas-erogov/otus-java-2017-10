@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:db.properties"/>
+    <bean id="myORMExecutor" class="myorm.MyORMExecutor" init-method="init">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+        <property name="cacheEngine" ref="cacheEngine"/>
+    </bean>
+
+    <bean id="cacheEngine" class="cache.CacheEngineImpl">
+        <constructor-arg name="maxElements" value="${cache.max_elements}"/>
+        <constructor-arg name="lifeTimeMs" value="${cache.life_time_ms}"/>
+        <constructor-arg name="idleTimeMs" value="${cache.idle_time_ms}"/>
+        <constructor-arg name="isEternal" value="${cache.is_eternal}" />
+    </bean>
+
+    <bean id="dbService" class="dbservice.DBServiceMyORMImpl" init-method="init">
+        <constructor-arg name="myORMExecutor" ref="myORMExecutor"/>
+        <property name="worker">
+            <bean id="dbSocketClient" class=" worker.ClientMessageWorker" init-method="init">
+                <constructor-arg name="host" value="${server.host}"/>
+                <constructor-arg name="port" value="${server.port}"/>
+                <constructor-arg name="subscriber" value="${dbname}"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${db.driver}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+</head>
+<body>
+<h2>Welcome</h2>
+<br/>
+<div id="auth_block">
+    <form>
+        <table>
+            <tr>
+                <td>Login:</td>
+                <td><input id="user" type="text"></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input id="password" type="password"></td>
+            </tr><tr>
+                <td>Database</td>
+                <td><input id="dbsource" type="text"></td>
+            </tr>
+        </table>
+        <input type="button" value="Submit" onclick="sendCredentials();">
+    </form>
+</div>
+<div id="cache_block" style="display: none">
+    <h2>Cache status:</h2>
+    <table>
+        <tr>
+            <td>Cache hits:</td>
+            <td><div id="cache_hits"></div></td>
+        </tr>
+        <tr>
+            <td>Cache missed:</td>
+            <td><div id="cache_missed"></div></td>
+        </tr>
+    </table>
+</div>
+<br>
+<div id="some_actions" style="display: none">
+    <button type="button" onclick="sendActions();">Some actions</button>
+</div>
+
+<div id="output" style="display: none">
+    <textarea id="messages" rows="16" cols="48" readonly="readonly"></textarea>
+</div>
+
+<script type="text/javascript" src="websocket.js"></script>
+</body>
+</html>

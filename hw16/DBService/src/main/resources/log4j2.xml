@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration >
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p [%t] %C{2} %x - %m%n"/>
+        </Console>
+        <RollingFile name="fileSpringOut" fileName="db.spring.log" filePattern="db.spring.log.%i" bufferedIO="false">
+            <PatternLayout pattern="%d %-5p [%t] %C{2} %x - %m%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="fileOut" fileName="db.log" filePattern="db.log.%i" bufferedIO="false">
+            <PatternLayout pattern="%d %-5p [%t] %C{2} %x - %m%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="fileOut"/>
+        </Root>
+        <Logger name="org.springframework" level="debug" additivity="false">
+            <AppenderRef ref="fileSpringOut"/>
+        </Logger>
+    </Loggers>
+</Configuration>
