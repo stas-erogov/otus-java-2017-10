@@ -1,5 +1,6 @@
 package dbservice;
 
+import commands.*;
 import dao.AddressesDAOMyORM;
 import dao.BaseDAO;
 import dao.PhonesDAOMyORM;
@@ -29,6 +30,8 @@ public class DBServiceMyORMImpl implements DBService, EndPointService {
 
     private MessageWorker worker;
 
+    private Map<Class<? extends Message>, Command> commandsRegistry = new HashMap<>();
+
     public DBServiceMyORMImpl(MyORMExecutor myORMExecutor) {
         this.myORMExecutor = myORMExecutor;
     }
@@ -42,6 +45,11 @@ public class DBServiceMyORMImpl implements DBService, EndPointService {
         daos.put(AddressDataSet.class, new AddressesDAOMyORM(myORMExecutor));
         daos.put(PhoneDataSet.class, new PhonesDAOMyORM(myORMExecutor));
         worker.setEndPointService(this);
+
+        commandsRegistry.put(LoginMessage.class, new LoginCommand(worker));
+        commandsRegistry.put(CacheQueryMessage.class, new CacheQueryCommand(worker, myORMExecutor));
+        commandsRegistry.put(SomeActionsMessage.class, new SomeActionsCommand(worker, this));
+        commandsRegistry.put(HandshakeMessage.class, new HandshakeCommand(worker));
     }
 
     @Override
@@ -84,46 +92,6 @@ public class DBServiceMyORMImpl implements DBService, EndPointService {
 
     @Override
     public void execute(Message message) {
-        if (message instanceof LoginMessage) {
-            logger.info("DBService receive login request message");
-
-            LoginMessage loginMessage = (LoginMessage) message;
-            boolean isAdmin = isAdmin(loginMessage);
-            logger.info("isAdmin: " + isAdmin);
-
-            worker.accept(new CredentialAnswerMessage(worker.getSubscriber(), message.getSender(), isAdmin));
-        }
-
-        if (message instanceof CacheQueryMessage) {
-            logger.info("DBService receive CacheQueryMessage");
-
-            int hits = myORMExecutor.getCacheEngine().getHitCount();
-            int missed = myORMExecutor.getCacheEngine().getMissCount();
-            logger.info("Cache status. Hits: " + hits + ", missed: "+ missed);
-
-            worker.accept(new CacheStatusAnswerMessage(worker.getSubscriber(), message.getSender(), hits, missed));
-        }
-
-        if (message instanceof SomeActionsMessage) {
-            DBServiceHelper.someActions(this);
-        }
-
-        if (message instanceof HandshakeMessage) {
-            worker.accept(new HandshakeMessage(this.worker.getSubscriber(), ""));
-        }
-    }
-
-    private boolean isAdmin(LoginMessage loginMessage) {
-        Properties properties = new Properties();
-        try {
-            properties.load(Main.class.getClassLoader().getResourceAsStream("db.properties"));
-        } catch (FileNotFoundException e) {
-            logger.error("File not found front.properties", e);
-        } catch (IOException e) {
-            logger.error("Loading properties error", e);
-        }
-        String login = properties.getProperty("admin.login");
-        String password = properties.getProperty("admin.password");
-        return login.equals(loginMessage.getUser()) && password.equals(loginMessage.getPassword());
+        commandsRegistry.get(message.getClass()).execute(message);
     }
 }
